@@ -33,7 +33,7 @@ public class PhotosViewModel extends ViewModel {
 
         PagedList.Config pagedListConfig = new PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(PAGE_SIZE)
+                .setInitialLoadSizeHint(PAGE_SIZE * 3)
                 .setPageSize(PAGE_SIZE)
                 .build();
 

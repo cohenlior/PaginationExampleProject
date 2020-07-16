@@ -67,7 +67,9 @@ public class MainFragment extends Fragment {
     }
 
     private void replaceFragment(String url) {
-        Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction()
+        if (getActivity() == null) return;
+
+        (getActivity()).getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, FullScreenFragment.newInstance(url))
                 .addToBackStack(null)
                 .commit();
