@@ -49,6 +49,7 @@ public class PhotosDataSource extends PageKeyedDataSource<Integer, Photo> {
 
                         } else {
                             networkState.postValue(NetworkStatus.FAILED);
+                            Log.e(TAG, "Load initial error");
                         }
                     }
 
@@ -83,16 +84,16 @@ public class PhotosDataSource extends PageKeyedDataSource<Integer, Photo> {
                     networkState.postValue(NetworkStatus.SUCCESS);
 
                 } else {
-//                    networkState.postValue(NetworkStatus.FAILED);
-                    Log.i(TAG, "Pagination load after error");
+                    networkState.postValue(NetworkStatus.PAGINATION_ERROR);
+                    Log.e(TAG, "Pagination load after error");
                 }
             }
 
             @Override
             public void onFailure(Call<FlickerResponse> call, Throwable t) {
                 String errorMessage = t.getMessage();
-                networkState.postValue(NetworkStatus.FAILED);
-                Log.i(TAG, errorMessage != null ? errorMessage : "Fetch photos error");
+                networkState.postValue(NetworkStatus.PAGINATION_ERROR);
+                Log.e(TAG, errorMessage != null ? errorMessage : "Fetch photos error");
             }
         });
     }

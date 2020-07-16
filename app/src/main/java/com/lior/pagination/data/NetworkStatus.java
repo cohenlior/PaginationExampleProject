@@ -4,5 +4,5 @@ public enum NetworkStatus {
     LOADING,
     SUCCESS,
     FAILED,
-
+    PAGINATION_ERROR
 }
