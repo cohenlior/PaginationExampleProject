@@ -20,12 +20,12 @@ public class PhotosDataSource extends PageKeyedDataSource<Integer, Photo> {
 
     private static final String TAG = PhotosDataSource.class.getSimpleName();
 
-    private FlickerService restApiFactory;
+    private FlickerService flickerService;
 
     private MutableLiveData<NetworkStatus> networkState;
 
-    public PhotosDataSource() {
-        this.restApiFactory = FlickerApi.getInstance().create(FlickerService.class);
+    public PhotosDataSource(FlickerService flickerService) {
+        this.flickerService = flickerService;
         networkState = new MutableLiveData<>();
     }
 
@@ -39,7 +39,7 @@ public class PhotosDataSource extends PageKeyedDataSource<Integer, Photo> {
 
         networkState.postValue(NetworkStatus.LOADING);
 
-        restApiFactory.getRecentPhotos(API_KEY, 1)
+        flickerService.getRecentPhotos(API_KEY, 1)
                 .enqueue(new Callback<FlickerResponse>() {
                     @Override
                     public void onResponse(Call<FlickerResponse> call, retrofit2.Response<FlickerResponse> response) {
@@ -75,7 +75,7 @@ public class PhotosDataSource extends PageKeyedDataSource<Integer, Photo> {
 
         networkState.postValue(NetworkStatus.LOADING);
 
-        restApiFactory.getRecentPhotos(API_KEY, params.key).enqueue(new Callback<FlickerResponse>() {
+        flickerService.getRecentPhotos(API_KEY, params.key).enqueue(new Callback<FlickerResponse>() {
             @Override
             public void onResponse(Call<FlickerResponse> call, retrofit2.Response<FlickerResponse> response) {
 

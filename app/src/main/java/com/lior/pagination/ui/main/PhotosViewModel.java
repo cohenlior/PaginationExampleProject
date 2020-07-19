@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
+import com.lior.pagination.data.FlickerRepository;
 import com.lior.pagination.data.NetworkStatus;
 import com.lior.pagination.data.PhotosDataFactory;
 import com.lior.pagination.data.PhotosDataSource;
@@ -14,37 +15,28 @@ import com.lior.pagination.model.Photo;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+/**
+ * ViewModel for the [MainFragment] screen.
+ * The ViewModel works with the [FlickerRepository] to get the data.
+ */
 public class PhotosViewModel extends ViewModel {
 
-    private static final int PAGE_SIZE = 100;
-    private LiveData<NetworkStatus> networkState;
-    private LiveData<PagedList<Photo>> photoLiveData;
+    private FlickerRepository repository;
 
-    public PhotosViewModel() {
+    public PhotosViewModel(FlickerRepository repository) {
+        this.repository = repository;
         init();
     }
 
     private void init() {
-        Executor executor = Executors.newFixedThreadPool(5);
-
-        PhotosDataFactory photosDataFactory = new PhotosDataFactory();
-        networkState = Transformations.switchMap(photosDataFactory.getMutableLiveData(),
-                PhotosDataSource::getNetworkState);
-
-        PagedList.Config pagedListConfig = new PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(PAGE_SIZE * 3)
-                .setPageSize(PAGE_SIZE)
-                .build();
-
-        photoLiveData = new LivePagedListBuilder(photosDataFactory, pagedListConfig)
-                .setFetchExecutor(executor)
-                .build();
+        repository.getFlickerFeed();
     }
 
-    public LiveData<NetworkStatus> getNetworkState() { return networkState; }
-
     public LiveData<PagedList<Photo>> getPhotoLiveData() {
-        return photoLiveData;
+        return repository.getPhotoLiveData();
+    }
+
+    public LiveData<NetworkStatus> getNetworkState() {
+        return repository.getNetworkState();
     }
 }

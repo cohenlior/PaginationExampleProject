@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import com.lior.pagination.R;
 import com.lior.pagination.databinding.PhotoFragmentBinding;
 import com.lior.pagination.ui.detail.FullScreenFragment;
+import com.lior.pagination.utils.ServiceLocator;
 
 import java.util.Objects;
 
@@ -40,7 +41,9 @@ public class MainFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        PhotosViewModel photosViewModel = new ViewModelProvider(this).get(PhotosViewModel.class);
+        PhotosViewModel photosViewModel = new ViewModelProvider(this,
+                ServiceLocator.getInstance().provideViewModelFactory())
+                .get(PhotosViewModel.class);
 
         binding.photoList.setLayoutManager(new GridLayoutManager(getContext(), SPAN_COUNT));
 
